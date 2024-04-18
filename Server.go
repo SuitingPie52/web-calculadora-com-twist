@@ -11,7 +11,15 @@ type MainHandler struct {
 
 func (h MainHandler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
-	res.Write([]byte("Server aberto."))
+	
+	if !isMethodAndPathValid(req) {
+	
+		res.Write([]byte("errou"))
+		return
+	
+	}
+	
+	ResultController[req.Method][req.URL.Path](res, req)
 	
 }
 
@@ -25,6 +33,13 @@ func CreateServer() {
 	}
 	
 	log.Fatal(s.ListenAndServe())
+
+}
+
+
+func isMethodAndPathValid(req *http.Request)bool {
+
+	return ResultController[req.Method][req.URL.Path] != nil
 
 }
 
