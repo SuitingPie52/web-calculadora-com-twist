@@ -1,5 +1,7 @@
 package main
 
+import ("encoding/json")
+
 type Calculable interface {
 
 	Calculate(float64, float64, string)Calculable
@@ -21,5 +23,12 @@ var TableCalculable = map[string]Calculable{
 	"&":   Rot{},
 	"rot": Rot{},
 	
+}
+
+func CalculableToJson(c Calculable)[]byte {
+
+	j, _ := json.Marshal(c)
+	return j
+
 }
 

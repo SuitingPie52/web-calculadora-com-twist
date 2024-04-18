@@ -14,9 +14,9 @@ func (h MainHandler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	
 	if !isMethodAndPathValid(req) {
 	
-		res.Write([]byte("errou"))
+		res.Write(MessageToJson(TableMessages[404]))
 		return
-	
+
 	}
 	
 	ResultController[req.Method][req.URL.Path](res, req)
