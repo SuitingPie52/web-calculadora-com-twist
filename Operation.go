@@ -1,6 +1,10 @@
 package main
 
-import ("math")
+import ("math"	
+	"errors"
+	"strconv"
+	"strings"
+)
 
 type Operation struct {
 
@@ -15,11 +19,18 @@ type Sum struct {
 	
 }
 
-func (s Sum) Calculate(var1 float64, var2 float64, op string)Calculable {
+func (s Sum) Calculate(var1 float64, var2 float64, op string)(Calculable, error) {
 
 	s.Result = var1 + var2
 	s.Op = op
-	return s
+
+	if isRationalNumber(s.Result) {
+	
+		return s, errors.New("Número racional")
+	
+	}
+	
+	return s, nil
 
 }
 
@@ -29,11 +40,18 @@ type Sub struct {
 	
 }
 
-func (s Sub) Calculate(var1 float64, var2 float64, op string)Calculable {
+func (s Sub) Calculate(var1 float64, var2 float64, op string)(Calculable, error) {
 
 	s.Result = var1 - var2
 	s.Op = op
-	return s
+	
+	if isRationalNumber(s.Result) {
+	
+		return s, errors.New("Número racional")
+	
+	}
+	
+	return s, nil
 
 }
 
@@ -43,11 +61,18 @@ type Mul struct {
 	
 }
 
-func (s Mul) Calculate(var1 float64, var2 float64, op string)Calculable {
+func (s Mul) Calculate(var1 float64, var2 float64, op string)(Calculable, error) {
 
 	s.Result = var1 * var2
 	s.Op = op
-	return s
+	
+	if isRationalNumber(s.Result) {
+	
+		return s, errors.New("Número racional")
+	
+	}
+	
+	return s, nil
 
 }
 
@@ -57,11 +82,18 @@ type Div struct {
 	
 }
 
-func (s Div) Calculate(var1 float64, var2 float64, op string)Calculable {
+func (s Div) Calculate(var1 float64, var2 float64, op string)(Calculable, error) {
 
 	s.Result = var1 / var2
 	s.Op = op
-	return s
+	
+	if isRationalNumber(s.Result) {
+	
+		return s, errors.New("Número racional")
+	
+	}
+	
+	return s, nil
 
 }
 
@@ -71,11 +103,18 @@ type Pow struct {
 	
 }
 
-func (s Pow) Calculate(var1 float64, var2 float64, op string)Calculable {
+func (s Pow) Calculate(var1 float64, var2 float64, op string)(Calculable, error) {
 
 	s.Result = math.Pow(var1, var2)
 	s.Op = op
-	return s
+	
+	if isRationalNumber(s.Result) {
+	
+		return s, errors.New("Número racional")
+	
+	}
+	
+	return s, nil
 
 }
 
@@ -85,11 +124,37 @@ type Rot struct {
 	
 }
 
-func (s Rot) Calculate(var1 float64, var2 float64, op string)Calculable {
+func (s Rot) Calculate(var1 float64, var2 float64, op string)(Calculable, error) {
 
 	s.Result = math.Pow(var1, 1.0/var2)
 	s.Op = op
-	return s
+	
+	if isRationalNumber(s.Result) {
+	
+		return s, errors.New("Número racional")
+	
+	}
+	
+	return s, nil
 
 }
+
+func isRationalNumber (f float64) bool {
+
+	s := strconv.FormatFloat(f, 'g', -1, 64)
+	
+	if !strings.Contains(s, ".") {
+	
+		return true
+	
+	}
+	
+	slicedS := strings.Split(s, ".")
+	
+	return len(slicedS[1]) < 13
+	
+	
+
+}
+
 

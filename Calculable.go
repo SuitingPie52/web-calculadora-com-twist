@@ -4,7 +4,7 @@ import ("encoding/json")
 
 type Calculable interface {
 
-	Calculate(float64, float64, string)Calculable
+	Calculate(float64, float64, string) (Calculable, error)
 
 }
 

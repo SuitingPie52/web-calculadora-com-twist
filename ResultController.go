@@ -2,10 +2,9 @@ package main
 
 import(
 	"net/http"
+	"encoding/json"
 	"strings"
 	"strconv"
-	"encoding/json"
-	
 )
 
 var ResultController = map[string]map[string]func(http.ResponseWriter, *http.Request) {
@@ -60,7 +59,14 @@ func GetResult (res http.ResponseWriter, req *http.Request) {
 	
 	}
 	
-	s := TableCalculable[CheckOperators[true]].Calculate(var1, var2, op)
+	s, ratErr := TableCalculable[CheckOperators[true]].Calculate(var1, var2, op)
+	
+	if ratErr != nil {
+	
+		res.Write(MessageToJson(TableMessages[500]))
+		return
+	
+	}
 	
 	res.Write(CalculableToJson(s))
 	
