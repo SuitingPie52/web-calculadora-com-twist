@@ -19,18 +19,18 @@ type Sum struct {
 	
 }
 
-func (s Sum) Calculate(var1 float64, var2 float64, op string)(Calculable, error) {
+func (s Sum) Calculate(var1 float64, var2 float64, op string)(Calculable, error, float64) {
 
 	s.Result = var1 + var2
 	s.Op = op
 
 	if isRationalNumber(s.Result) {
 	
-		return s, errors.New("Número racional")
+		return s, errors.New("Número racional"), 0
 	
 	}
 	
-	return s, nil
+	return s, nil, s.Result
 
 }
 
@@ -40,18 +40,18 @@ type Sub struct {
 	
 }
 
-func (s Sub) Calculate(var1 float64, var2 float64, op string)(Calculable, error) {
+func (s Sub) Calculate(var1 float64, var2 float64, op string)(Calculable, error, float64) {
 
 	s.Result = var1 - var2
 	s.Op = op
 	
 	if isRationalNumber(s.Result) {
 	
-		return s, errors.New("Número racional")
+		return s, errors.New("Número racional"), 0
 	
 	}
 	
-	return s, nil
+	return s, nil, s.Result
 
 }
 
@@ -61,18 +61,18 @@ type Mul struct {
 	
 }
 
-func (s Mul) Calculate(var1 float64, var2 float64, op string)(Calculable, error) {
+func (s Mul) Calculate(var1 float64, var2 float64, op string)(Calculable, error, float64) {
 
 	s.Result = var1 * var2
 	s.Op = op
 	
 	if isRationalNumber(s.Result) {
 	
-		return s, errors.New("Número racional")
+		return s, errors.New("Número racional"), 0
 	
 	}
 	
-	return s, nil
+	return s, nil, s.Result
 
 }
 
@@ -82,18 +82,18 @@ type Div struct {
 	
 }
 
-func (s Div) Calculate(var1 float64, var2 float64, op string)(Calculable, error) {
+func (s Div) Calculate(var1 float64, var2 float64, op string)(Calculable, error, float64) {
 
 	s.Result = var1 / var2
 	s.Op = op
 	
 	if isRationalNumber(s.Result) {
 	
-		return s, errors.New("Número racional")
+		return s, errors.New("Número racional"), 0
 	
 	}
 	
-	return s, nil
+	return s, nil, s.Result
 
 }
 
@@ -103,18 +103,18 @@ type Pow struct {
 	
 }
 
-func (s Pow) Calculate(var1 float64, var2 float64, op string)(Calculable, error) {
+func (s Pow) Calculate(var1 float64, var2 float64, op string)(Calculable, error, float64) {
 
 	s.Result = math.Pow(var1, var2)
 	s.Op = op
 	
 	if isRationalNumber(s.Result) {
 	
-		return s, errors.New("Número racional")
+		return s, errors.New("Número racional"), 0
 	
 	}
 	
-	return s, nil
+	return s, nil, s.Result
 
 }
 
@@ -124,18 +124,18 @@ type Rot struct {
 	
 }
 
-func (s Rot) Calculate(var1 float64, var2 float64, op string)(Calculable, error) {
+func (s Rot) Calculate(var1 float64, var2 float64, op string)(Calculable, error, float64) {
 
 	s.Result = math.Pow(var1, 1.0/var2)
 	s.Op = op
 	
 	if isRationalNumber(s.Result) {
 	
-		return s, errors.New("Número racional")
+		return s, errors.New("Número racional"), 0
 	
 	}
 	
-	return s, nil
+	return s, nil, s.Result
 
 }
 

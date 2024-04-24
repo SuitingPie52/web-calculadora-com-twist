@@ -21,6 +21,13 @@ var GetFunctions = map[string]func(http.ResponseWriter, *http.Request) {
 
 func GetResult (res http.ResponseWriter, req *http.Request) {
 
+	if *alreadyWorked {
+	
+		RepeatGetResult(res, req)
+		return
+	
+	}
+
 	op := req.URL.Query().Get("op")
 
 	noDashOp := strings.ReplaceAll(op, " ", "")
@@ -59,7 +66,7 @@ func GetResult (res http.ResponseWriter, req *http.Request) {
 	
 	}
 	
-	s, ratErr := TableCalculable[CheckOperators[true]].Calculate(var1, var2, op)
+	s, ratErr, result := TableCalculable[CheckOperators[true]].Calculate(var1, var2, op)
 	
 	if ratErr != nil {
 	
@@ -68,10 +75,68 @@ func GetResult (res http.ResponseWriter, req *http.Request) {
 	
 	}
 	
+	*LastResult = result 
+	*alreadyWorked = true
 	res.Write(CalculableToJson(s))
 	
 	return
 
+}
+
+func RepeatGetResult(res http.ResponseWriter, req *http.Request) {
+
+
+	op := req.URL.Query().Get("op")
+
+	noDashOp := strings.ReplaceAll(op, " ", "")
+
+	var CheckOperators = map[bool]string{}
+
+	for k := range TableCalculable {
+	
+		CheckOperators[strings.Contains(noDashOp, k)] = k
+	
+	}
+	
+	if !isAnyOperationValid(CheckOperators) {
+	
+		WriteInvalidExpression(res, op)
+		return
+		
+	}
+	
+	noPrefixOp, found := strings.CutPrefix(noDashOp, CheckOperators[true])
+	
+	if found == false {
+	
+		WriteInvalidExpression(res, op)
+		return
+	
+	}
+		
+	var2, err2 := strconv.ParseFloat(noPrefixOp, 64)
+	
+	if err2 != nil {
+	
+		WriteInvalidExpression(res, op)
+		return		
+	
+	}
+	
+	s, ratErr, result := TableCalculable[CheckOperators[true]].Calculate(*LastResult, var2, op)
+	
+	if ratErr != nil {
+	
+		res.Write(MessageToJson(TableMessages[500]))
+		return
+	
+	}
+	
+	*LastResult = result 
+	res.Write(CalculableToJson(s))
+	
+	return
+	
 }
 
 func isAnyOperationValid (m map[bool]string)bool {

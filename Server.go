@@ -9,6 +9,9 @@ import (
 type MainHandler struct {
 }
 
+var alreadyWorked *bool = new(bool)
+var LastResult *float64 = new(float64)
+
 func (h MainHandler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
 	
@@ -26,7 +29,7 @@ func (h MainHandler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 func CreateServer() {
 
 	s := &http.Server{
-		Addr:         "172.22.51.31:8080",
+		Addr:         "192.168.0.9:8080",
 		Handler:      MainHandler{},
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 10 * time.Second,
